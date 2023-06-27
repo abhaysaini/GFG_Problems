@@ -98,39 +98,29 @@ struct Node
 
 class Solution {
   public:
-  
-  void levelOrderTraversal(vector<vector<int>> &v, Node* root){
-      queue<Node*> q;
-      q.push(root);
-      while(!q.empty()){
-          int size = q.size();
-          vector<int> ans;
-          for(int i =0;i<size;i++){
-              Node * t = q.front();
-              q.pop();
-              if(t->left){
-                  q.push(t->left);
-              }
-              if(t->right){
-                   q.push(t->right);
-              }
-              ans.push_back(t->data);
-          }
-          v.push_back(ans);
-      }
-      
-  }
-    
+    // Function to get the maximum width of a binary tree.
     int getMaxWidth(Node* root) {
-
-       vector<vector<int>> v;
-       levelOrderTraversal(v,root);
-       int maxi = 0;
-       for(int i =0;i<v.size();i++){
-           int x = v[i].size();
-           maxi = max(maxi,x);
-       }
-       return maxi;
+        if(!root){
+            return 0;
+        }
+        queue<Node*> q;
+        q.push(root);
+        int ans =0;
+        while(!q.empty()){
+            int size= q.size();
+            for(int i =0;i<size;i++){
+                Node* temp = q.front();
+                q.pop();
+                if(temp->left){
+                    q.push(temp->left);
+                }
+                if(temp->right){
+                    q.push(temp->right);
+                }
+            }
+            ans = max(ans,size);
+        }
+        return ans;
     }
 };
 
