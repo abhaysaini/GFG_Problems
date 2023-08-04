@@ -9,49 +9,40 @@ using namespace std;
 // User function Template for C++
 
 class Solution {
-  private:
-  bool dfs(int node,vector<int>&vis,vector<int>&pathsum,vector<int>&check,vector<int> adj[]){
-      vis[node]=1;
-      pathsum[node]=1;
-      
-      for(auto it:adj[node]){
-          if(!vis[it]){
-              if(dfs(it,vis,pathsum,check,adj) == true){
-                  check[it]=0;
-                  return true;
-              }
-          }
-          else if(pathsum[it]){
-              check[it]=0;
-              return true;
-          }
-      }
-      
-      check[node]=1;
-      pathsum[node]=0;
-      return false;
-  }
-  
   public:
     vector<int> eventualSafeNodes(int V, vector<int> adj[]) {
-        vector<int> vis(V,0);
-        vector<int> pathsum(V,0);
+        // code here
+        
+        vector<int> adjR[V];
+        
         vector<int> safenode;
-        vector<int> check(V,0);
-        
+        vector<int> indegree(V,0);
         for(int i =0;i<V;i++){
-            if(!vis[i]){
-                dfs(i,vis,pathsum,check,adj);
+            for(auto it:adj[i]){
+                adjR[it].push_back(i);
+                indegree[i]++;
             }
         }
         
-        
+        queue<int> q;
         for(int i =0;i<V;i++){
-            if(check[i]==1){
-                safenode.push_back(i);
+            if(indegree[i] == 0 ){
+                q.push(i);
             }
         }
         
+        while(!q.empty()){
+            int node = q.front();
+            q.pop();
+            safenode.push_back(node);
+            
+            for(auto it : adjR[node]){
+                indegree[it]--;
+                if(indegree[it]==0) {q.push(it);}
+            }
+        }
+        
+        sort(safenode.begin(),safenode.end());
         return safenode;
     }
 };
